@@ -15,9 +15,9 @@ namespace MP3Player
     public partial class MainWindow : Form
     {
         private WMPLib.WindowsMediaPlayer wplayer;
-        private WMPLib.IWMPMedia media;
         private WMPLib.IWMPPlaylist playlist;
         private ArrayList songlist;
+        int skinNumber;
 
         public MainWindow()
         {
@@ -28,6 +28,7 @@ namespace MP3Player
             autostartCheckBox.Checked = wplayer.settings.autoStart; 
             textLabel.Text = "00:00 / 00:00";
             songlist = new ArrayList();
+            SetDefaultSkin();
         }
 
         private void openFileDialog_FileOk(object sender, CancelEventArgs e)
@@ -49,29 +50,30 @@ namespace MP3Player
             {
                 songlist.Clear();
                 playlist.clear();
+                songListBox.Items.Clear();
                 foreach (string file in openPlaylistDialog.FileNames)
                 {
                     WMPLib.IWMPMedia fileMedia = wplayer.newMedia(file);
+                    string songName = fileMedia.name + " - " + fileMedia.durationString;
                     playlist.appendItem(fileMedia);
-                    songlist.Add(fileMedia.name + " - " + fileMedia.durationString);
+                    songlist.Add(songName);
+                    songListBox.Items.Add(songName);
                 }
                 wplayer.currentPlaylist = playlist;
-                foreach (String song in songlist)
-                {
-                    Console.WriteLine(song);
-                    songListBox.Items.Add(song);
-                }
                 updateSongTimer();
+                if (wplayer.settings.autoStart) timer1.Start();
             }
         }
 
         private void playButton_Click(object sender, EventArgs e)
         {
             wplayer.controls.play();
+            timer1.Start();
         }
 
         private void stopButton_Click(object sender, EventArgs e)
         {
+            timer1.Stop();
             wplayer.controls.stop();
             trackBar.Value = 0;
             updateSongTimer();
@@ -84,11 +86,17 @@ namespace MP3Player
 
         private void pauseButton_Click(object sender, EventArgs e)
         {
+            timer1.Stop();
             wplayer.controls.pause();
+            
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            if (songNameBox.Text != wplayer.currentMedia.name) {
+                songNameBox.Text = wplayer.currentMedia.name;
+            }
+
             if (wplayer.currentMedia != null && trackBar.Maximum != (int) wplayer.currentMedia.duration) {
                 trackBar.Maximum = (int) Math.Ceiling(wplayer.currentMedia.duration);
             }
@@ -107,11 +115,6 @@ namespace MP3Player
             timer1.Start();
         }
 
-        private void openPlaylistDialog_FileOk(object sender, CancelEventArgs e)
-        {
-
-        }
-
         private void updateSongTimer()
         {
             textLabel.Text = (wplayer.controls.currentPosition > 0 ? wplayer.controls.currentPositionString : "00:00")
@@ -123,6 +126,38 @@ namespace MP3Player
             ListBox myListBox = (ListBox)sender;
             int songIndex = myListBox.SelectedIndex;
             wplayer.controls.playItem(playlist.Item[songIndex]);
+        }
+
+        private void SetDefaultSkin()
+        {
+            openFileButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\folder1.png");
+            playButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\play1.png");
+            pauseButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\pause1.png");
+            stopButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\stop1.png");
+            this.BackColor = Color.White;
+            skinNumber = 1;
+        }
+
+        private void ChangeSkin()
+        {
+            if (skinNumber == 1)
+            {
+                openFileButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\music-2.png");
+                playButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\play-2.png");
+                pauseButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\pause-2.png");
+                stopButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\stop-2.png");
+                this.BackColor = Color.DarkGray;
+                skinNumber = 2;
+            }
+            else
+            {
+                SetDefaultSkin();
+            }
+        }
+
+        private void changeSkinButton_Click(object sender, EventArgs e)
+        {
+            ChangeSkin();
         }
     }
 }

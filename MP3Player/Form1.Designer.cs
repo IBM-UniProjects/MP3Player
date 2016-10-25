@@ -41,8 +41,8 @@
             this.pauseButton = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.songNameBox = new System.Windows.Forms.TextBox();
-            this.openPlaylistDialog = new System.Windows.Forms.OpenFileDialog();
             this.songListBox = new System.Windows.Forms.ListBox();
+            this.changeSkinButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -140,7 +140,6 @@
             // 
             // timer1
             // 
-            this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // songNameBox
@@ -151,11 +150,6 @@
             this.songNameBox.Size = new System.Drawing.Size(400, 20);
             this.songNameBox.TabIndex = 8;
             // 
-            // openPlaylistDialog
-            // 
-            this.openPlaylistDialog.FileName = "openPlaylistDialog";
-            this.openPlaylistDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openPlaylistDialog_FileOk);
-            // 
             // songListBox
             // 
             this.songListBox.FormattingEnabled = true;
@@ -165,12 +159,22 @@
             this.songListBox.TabIndex = 11;
             this.songListBox.DoubleClick += new System.EventHandler(this.songListBox_DoubleClick);
             // 
+            // changeSkinButton
+            // 
+            this.changeSkinButton.Location = new System.Drawing.Point(12, 329);
+            this.changeSkinButton.Name = "changeSkinButton";
+            this.changeSkinButton.Size = new System.Drawing.Size(20, 20);
+            this.changeSkinButton.TabIndex = 12;
+            this.changeSkinButton.UseVisualStyleBackColor = true;
+            this.changeSkinButton.Click += new System.EventHandler(this.changeSkinButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(570, 373);
+            this.ClientSize = new System.Drawing.Size(564, 361);
+            this.Controls.Add(this.changeSkinButton);
             this.Controls.Add(this.songListBox);
             this.Controls.Add(this.songNameBox);
             this.Controls.Add(this.pauseButton);
@@ -180,6 +184,9 @@
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.playButton);
             this.Controls.Add(this.openFileButton);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(580, 400);
+            this.MinimumSize = new System.Drawing.Size(580, 400);
             this.Name = "MainWindow";
             this.Text = "MainWindow";
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
@@ -201,8 +208,8 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ImageList imgButtons;
         private System.Windows.Forms.TextBox songNameBox;
-        private System.Windows.Forms.OpenFileDialog openPlaylistDialog;
         private System.Windows.Forms.ListBox songListBox;
+        private System.Windows.Forms.Button changeSkinButton;
     }
 }
 
