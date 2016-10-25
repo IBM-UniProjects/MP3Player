@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +17,7 @@ namespace MP3Player
         private WMPLib.WindowsMediaPlayer wplayer;
         private WMPLib.IWMPMedia media;
         private WMPLib.IWMPPlaylist playlist;
+        private ArrayList songlist;
 
         public MainWindow()
         {
@@ -24,7 +26,8 @@ namespace MP3Player
             wplayer.settings.autoStart = false;
             playlist = wplayer.playlistCollection.newPlaylist("DefaultPlaylist");
             autostartCheckBox.Checked = wplayer.settings.autoStart; 
-            textLabel.Text = "*stop*";
+            textLabel.Text = "00:00 / 00:00";
+            songlist = new ArrayList();
         }
 
         private void openFileDialog_FileOk(object sender, CancelEventArgs e)
@@ -34,21 +37,31 @@ namespace MP3Player
 
         private void openFileButton_Click(object sender, EventArgs e)
         {
-            String filePath = "";
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            OpenFileDialog openPlaylistDialog = new OpenFileDialog();
 
-            openFileDialog.InitialDirectory = "c:\\";
-            openFileDialog.Filter = "mp3 files (*.mp3)|*.mp3|All files (*.*)|*.*";
-            openFileDialog.FilterIndex = 2;
-            openFileDialog.RestoreDirectory = true;
+            openPlaylistDialog.InitialDirectory = @"c:\";
+            openPlaylistDialog.Filter = "mp3 files (*.mp3)|*.mp3|All files (*.*)|*.*";
+            openPlaylistDialog.FilterIndex = 2;
+            openPlaylistDialog.Multiselect = true;
+            openPlaylistDialog.RestoreDirectory = true;
 
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (openPlaylistDialog.ShowDialog() == DialogResult.OK)
             {
-                filePath = openFileDialog.FileName;
-                media = wplayer.newMedia(filePath);
-                wplayer.URL = media.sourceURL;
-                trackBar.Maximum = (int) media.duration;
-                songNameBox.Text = media.name;
+                songlist.Clear();
+                playlist.clear();
+                foreach (string file in openPlaylistDialog.FileNames)
+                {
+                    WMPLib.IWMPMedia fileMedia = wplayer.newMedia(file);
+                    playlist.appendItem(fileMedia);
+                    songlist.Add(fileMedia.name + " - " + fileMedia.durationString);
+                }
+                wplayer.currentPlaylist = playlist;
+                foreach (String song in songlist)
+                {
+                    Console.WriteLine(song);
+                    songListBox.Items.Add(song);
+                }
+                updateSongTimer();
             }
         }
 
@@ -60,6 +73,8 @@ namespace MP3Player
         private void stopButton_Click(object sender, EventArgs e)
         {
             wplayer.controls.stop();
+            trackBar.Value = 0;
+            updateSongTimer();
         }
 
         private void autostartCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -74,8 +89,12 @@ namespace MP3Player
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            if (wplayer.currentMedia != null && trackBar.Maximum != (int) wplayer.currentMedia.duration) {
+                trackBar.Maximum = (int) Math.Ceiling(wplayer.currentMedia.duration);
+            }
             if (wplayer.playState == WMPLib.WMPPlayState.wmppsPlaying) {
-                textLabel.Text = wplayer.controls.currentPositionString;
+                updateSongTimer();
+                Console.WriteLine(wplayer.controls.currentPositionString);
                 trackBar.Value = (int) wplayer.controls.currentPosition;
             }
         }
@@ -93,24 +112,17 @@ namespace MP3Player
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void updateSongTimer()
         {
-            OpenFileDialog openPlaylistDialog = new OpenFileDialog();
+            textLabel.Text = (wplayer.controls.currentPosition > 0 ? wplayer.controls.currentPositionString : "00:00")
+                + " / " + wplayer.currentMedia.durationString;
+        }
 
-            openPlaylistDialog.InitialDirectory = "c:\\";
-            openPlaylistDialog.Filter = "mp3 files (*.mp3)|*.mp3|All files (*.*)|*.*";
-            openPlaylistDialog.FilterIndex = 2;
-            openPlaylistDialog.Multiselect = true;
-            openPlaylistDialog.RestoreDirectory = true;
-
-            if (openPlaylistDialog.ShowDialog() == DialogResult.OK)
-            {
-                foreach (string file in openPlaylistDialog.FileNames)
-                {
-                    playlist.appendItem(wplayer.newMedia(file));
-                }
-                wplayer.currentPlaylist = playlist;
-            }
+        private void songListBox_DoubleClick(object sender, EventArgs e)
+        {
+            ListBox myListBox = (ListBox)sender;
+            int songIndex = myListBox.SelectedIndex;
+            wplayer.controls.playItem(playlist.Item[songIndex]);
         }
     }
 }

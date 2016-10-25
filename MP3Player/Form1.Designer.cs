@@ -42,8 +42,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.songNameBox = new System.Windows.Forms.TextBox();
             this.openPlaylistDialog = new System.Windows.Forms.OpenFileDialog();
-            this.button1 = new System.Windows.Forms.Button();
-            this.listView = new System.Windows.Forms.ListView();
+            this.songListBox = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -122,7 +121,7 @@
             // textLabel
             // 
             this.textLabel.AutoSize = true;
-            this.textLabel.Location = new System.Drawing.Point(24, 33);
+            this.textLabel.Location = new System.Drawing.Point(75, 38);
             this.textLabel.Name = "textLabel";
             this.textLabel.Size = new System.Drawing.Size(35, 13);
             this.textLabel.TabIndex = 6;
@@ -157,24 +156,14 @@
             this.openPlaylistDialog.FileName = "openPlaylistDialog";
             this.openPlaylistDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openPlaylistDialog_FileOk);
             // 
-            // button1
+            // songListBox
             // 
-            this.button1.ImageIndex = 7;
-            this.button1.ImageList = this.imgButtons;
-            this.button1.Location = new System.Drawing.Point(103, 311);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(50, 50);
-            this.button1.TabIndex = 9;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // listView
-            // 
-            this.listView.Location = new System.Drawing.Point(103, 210);
-            this.listView.Name = "listView";
-            this.listView.Size = new System.Drawing.Size(357, 95);
-            this.listView.TabIndex = 10;
-            this.listView.UseCompatibleStateImageBehavior = false;
+            this.songListBox.FormattingEnabled = true;
+            this.songListBox.Location = new System.Drawing.Point(103, 210);
+            this.songListBox.Name = "songListBox";
+            this.songListBox.Size = new System.Drawing.Size(357, 95);
+            this.songListBox.TabIndex = 11;
+            this.songListBox.DoubleClick += new System.EventHandler(this.songListBox_DoubleClick);
             // 
             // MainWindow
             // 
@@ -182,8 +171,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(570, 373);
-            this.Controls.Add(this.listView);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.songListBox);
             this.Controls.Add(this.songNameBox);
             this.Controls.Add(this.pauseButton);
             this.Controls.Add(this.textLabel);
@@ -214,8 +202,7 @@
         private System.Windows.Forms.ImageList imgButtons;
         private System.Windows.Forms.TextBox songNameBox;
         private System.Windows.Forms.OpenFileDialog openPlaylistDialog;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ListView listView;
+        private System.Windows.Forms.ListBox songListBox;
     }
 }
 
