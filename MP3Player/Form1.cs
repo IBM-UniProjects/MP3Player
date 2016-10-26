@@ -102,16 +102,19 @@ namespace MP3Player
             }
             if (wplayer.playState == WMPLib.WMPPlayState.wmppsPlaying) {
                 updateSongTimer();
-                Console.WriteLine(wplayer.controls.currentPositionString);
                 trackBar.Value = (int) wplayer.controls.currentPosition;
             }
         }
 
         private void trackBar_Scroll(object sender, EventArgs e)
         {
+            if (trackBar.Value >= trackBar.Maximum) return;
+            trackBar.Enabled = false;
             timer1.Stop();
             wplayer.controls.currentPosition = trackBar.Value;
-            System.Threading.Thread.Sleep(300);
+            updateSongTimer();
+            System.Threading.Thread.Sleep(500);
+            trackBar.Enabled = true;
             timer1.Start();
         }
 
