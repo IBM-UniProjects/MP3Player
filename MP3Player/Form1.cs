@@ -134,7 +134,7 @@ namespace MP3Player
             playButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\play1.png");
             pauseButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\pause1.png");
             stopButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\stop1.png");
-            this.BackColor = Color.White;
+            this.BackColor = Color.RosyBrown;
             skinNumber = 1;
         }
 
@@ -146,7 +146,7 @@ namespace MP3Player
                 playButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\play-2.png");
                 pauseButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\pause-2.png");
                 stopButton.Image = Image.FromFile(Directory.GetCurrentDirectory() + @"\..\..\icons\stop-2.png");
-                this.BackColor = Color.DarkGray;
+                this.BackColor = Color.LightSteelBlue;
                 skinNumber = 2;
             }
             else
